@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "ES2016"
+    },
+    "typeAcquisition": {
+        "include": [
+            "jquery",
+            "leaflet",
+            "iitc"
+        ]
+    }
+}
