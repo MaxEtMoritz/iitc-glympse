@@ -8,13 +8,13 @@
   },
   "author": "MaxEtMoritz",
   "license": "UNLICENSED",
-  "dependencies": {
-  },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.18.9",
     "@types/iitc": "^0.30.3",
     "@types/jquery": "^3.5.14",
     "@types/leaflet": "^1.7.11",
-    "@babel/eslint-parser": "^7.18.9",
-    "eslint": "^8.20.0"
+    "eslint": "^8.20.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-userscripts": "^0.2.8"
   }
 }

@@ -1,24 +1,72 @@
 {
-    "extends":[
-        "eslint:recommended"
+    "extends": [
+        "eslint:recommended",
+        "airbnb",
+        "plugin:userscripts/recommended"
     ],
     "env": {
         "browser": true,
-        "es6":true
+        "es6": true
     },
     "parser": "@babel/eslint-parser",
     "parserOptions": {
         "requireConfigFile": false,
         "babelOptions": {
-          "babelrc": false,
-          "configFile": false
-          // your babel options
-          //"presets": ["@babel/preset-env"]
+            "babelrc": false,
+            "configFile": false
+            // your babel options
+            //"presets": ["@babel/preset-env"]
         }
-      },
+    },
     "root": true,
     "globals": {
-        "map":"readonly",
-        "dialog":"readonly"
+        "GM_info": "readonly",
+        "L":"readonly"
+    },
+    "rules": {
+        "linebreak-style": [
+            "warn",
+            "windows"
+        ],
+        "no-alert": "off",
+        "no-param-reassign": [
+            "error",
+            {
+                "props": false
+            }
+        ],
+        "camelcase": [
+            "error",
+            {
+                "ignoreGlobals": true
+            }
+        ],
+        "valid-jsdoc": [
+            "error",
+            {
+                "requireReturn": false,
+                "prefer": {
+                    "return": "returns",
+                    "exception": "throws"
+                }
+            }
+        ],
+        "max-len": [
+            "warn",
+            {
+                "code": 120,
+                "ignoreComments": true,
+                "ignoreUrls": true
+            }
+        ],
+        "prefer-destructuring": "off",
+        "userscripts/no-invalid-headers": [
+            "error",
+            {
+                "allowed": [
+                    "category"
+                ]
+            }
+        ]
     }
 }
