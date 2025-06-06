@@ -1,9 +1,12 @@
 // ==UserScript==
 // @name         IITC plugin: Glympse
+// @id           Glympse@MaxEtMoritz
 // @category     Layer
 // @author       MaxEtMoritz
-// @version      0.0.1
+// @version      0.0.2
 // @namespace    https://github.com/MaxEtMoritz/iitc-glympse
+// @homepage     https://github.com/MaxEtMoritz/iitc-glympse
+// @homepageURL  https://github.com/MaxEtMoritz/iitc-glympse
 // @downloadURL  https://github.com/MaxEtMoritz/iitc-glympse/raw/master/iitc-glympsemap.user.js
 // @updateURL    https://github.com/MaxEtMoritz/iitc-glympse/raw/master/iitc-glympsemap.user.js
 // @description  View a Glympse tag directly on the Intel map.
@@ -118,7 +121,7 @@ function wrapper(PluginInfo) {
     .glympse-arrowhead.expired{
       background-position: right;
     }
-    `;
+  `;
 
   // #endregion
 
@@ -356,11 +359,14 @@ function wrapper(PluginInfo) {
     }
     if (m.expired) { htmlstring += '<br>Sharing Expired.'; }
 
-    htmlstring += /* html */`
-      <dl>
-      <dt>travelling:</dt>
-      <dd>By ${travelMode[m.travelType]}</dd>
-    `;
+    htmlstring += '<dl>';
+
+    if (m.travelType !== undefined) {
+      htmlstring += /* html */`
+        <dt>travelling:</dt>
+        <dd>By ${travelMode[m.travelType]}</dd>
+      `;
+    }
 
     if (typeof (m.speed) === 'number') {
       htmlstring += /* html */`
@@ -488,7 +494,8 @@ function wrapper(PluginInfo) {
           }
           if (newNickName) {
             m.name = newNickName.v;
-            m.marker.options.title = newNickName.v;
+            // m.marker.options.title = newNickName.v;
+            m.marker.setTooltipContent(newNickName.v);
           }
 
           // handle invite expiry change
@@ -523,17 +530,17 @@ function wrapper(PluginInfo) {
           m.travelType = response.properties
             ?.find((p) => p.n === 'travel_mode')
             ?.v
-            .type
+            ?.type
           ?? response.data
             ?.find((p) => p.n === 'travel_mode')
             ?.v
-            .type
+            ?.type
           ?? m.travelType;
 
           updatePopup(m);
         }));
       });
-      await Promise.all(tooManyPromises);
+      await Promise.allSettled(tooManyPromises);
     }, updateSpeed);
   }
 
@@ -569,10 +576,12 @@ function wrapper(PluginInfo) {
         allMembers.splice(allMembers.indexOf(m), 1);
       }).then((response) => {
         if (thisMemberHasError) return;
-        response.location.forEach((l) => {
-          latLngs.push([l[1] / 1000000, l[2] / 1000000]);
-        });
-        const latestLocationWithAdditionalInfo = findLast(response.location, ((e) => e.length >= 5));
+        if (response.location) {
+          response.location.forEach((l) => {
+            latLngs.push([l[1] / 1000000, l[2] / 1000000]);
+          });
+        }
+        const latestLocationWithAdditionalInfo = findLast(response.location ?? [], ((e) => e.length >= 5));
         if (latestLocationWithAdditionalInfo) {
           // speed is null if denied by user, null * 0.036 = 0 ==> check for null before multiplication
           if (typeof latestLocationWithAdditionalInfo[3] === 'number') {
@@ -586,7 +595,7 @@ function wrapper(PluginInfo) {
         m.last = new Date(response.last);
         m.expired = response.properties.find((p) => p.n === 'expired')?.v;
         m.avatar = response.properties.find((p) => p.n === 'avatar')?.v;
-        m.travelType = response.properties.find((p) => p.n === 'travel_mode')?.v.type;
+        m.travelType = response.properties.find((p) => p.n === 'travel_mode')?.v?.type;
         m.line = L.polyline(latLngs, { color: 'red', interactive: false }).addTo(glympseLayers);
         let className = 'glympse-arrowhead';
         if (m.expired) { className += ' expired'; }
@@ -607,7 +616,7 @@ function wrapper(PluginInfo) {
         updatePopup(m);
       }));
     });
-    await Promise.all(tooManyPromises);
+    await Promise.allSettled(tooManyPromises);
     startUpdateLoop();
   }
 

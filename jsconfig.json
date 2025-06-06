@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2016"
+        "target": "es2020"
     },
     "typeAcquisition": {
         "include": [
