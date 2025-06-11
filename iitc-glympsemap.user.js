@@ -3,7 +3,7 @@
 // @id           Glympse@MaxEtMoritz
 // @category     Layer
 // @author       MaxEtMoritz
-// @version      0.0.2
+// @version      0.0.3
 // @namespace    https://github.com/MaxEtMoritz/iitc-glympse
 // @homepage     https://github.com/MaxEtMoritz/iitc-glympse
 // @homepageURL  https://github.com/MaxEtMoritz/iitc-glympse
@@ -791,8 +791,10 @@ function wrapper(PluginInfo) {
  * wrapper end
  * inject code into site context
  */
-const script = document.createElement('script');
-const info = {};
+// eslint-disable-next-line no-var, vars-on-top
+var script = document.createElement('script');
+// eslint-disable-next-line no-var, vars-on-top
+var info = {};
 if (typeof GM_info !== 'undefined' && GM_info && GM_info.script) {
   info.script = {
     version: GM_info.script.version,
